@@ -1,32 +1,25 @@
 package main
 
-import (
-	"fmt"
-	"strings"
-)
+import "fmt"
 
 func main() {
-	fmt.Println("aaaaaa")
 
-	fmt.Println("HELLO WORLD")
-	fmt.Println("HELLO " + "WORLD")
-	fmt.Println(string("HELLO WORLD"[0]))
+	t, f := true, false
 
-	var s string = "hello world"
+	//%T 方表示
+	//%v 値のデフォルトのフォーマットでの表現を出力
+	//%t bool型を厳密に表したい場合
+	fmt.Printf("%T %v %t\n", t, 1, t)
+	fmt.Printf("%T %v %t\n", f, 0, f)
 
-	fmt.Println(strings.Replace(s, "h", "x", 1))
-	//置換処理
-	//strings.Replace
-	s = strings.Replace(s, "h", "x", 1)
-	fmt.Println(s)
-	s = "hello world"
-	fmt.Println(strings.Contains(s, "hello"))
+	fmt.Println(true && true)
+	fmt.Println(true && false)
+	fmt.Println(false && false, "\n")
 
-	//バッククォートは、改行など勝手にエスケープしてくれる
-	fmt.Println(`test
-				test
-test`)
-	//よく聞くのは、バックスラッシュでの対応
-	fmt.Println("\"")
-	fmt.Println(`"`)
+	fmt.Println(true || true)
+	fmt.Println(true || false)
+	fmt.Println(false || false, "\n")
+
+	fmt.Println(!true)
+	fmt.Println(!false)
 }
