@@ -1,25 +1,28 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
 func main() {
+	var x int = 1
+	xx := float64(x)
+	fmt.Printf("%T %v %f\n", xx, xx, xx)
 
-	t, f := true, false
+	var y float64 = 1.2
+	yy := int(y)
+	fmt.Printf("%T %v %d\n", yy, yy, yy)
 
-	//%T 方表示
-	//%v 値のデフォルトのフォーマットでの表現を出力
-	//%t bool型を厳密に表したい場合
-	fmt.Printf("%T %v %t\n", t, 1, t)
-	fmt.Printf("%T %v %t\n", f, 0, f)
+	var s string = "14"
 
-	fmt.Println(true && true)
-	fmt.Println(true && false)
-	fmt.Println(false && false, "\n")
+	//strconvのモジュールで文字列の数字を数値の型に返還などができる。
+	//Atoiは、2つの返り値があるが, i,_ 「_」を使うことで、2つ目の返り値(今回の場合はエラー)は使わないとできる
 
-	fmt.Println(true || true)
-	fmt.Println(true || false)
-	fmt.Println(false || false, "\n")
+	i, _ := strconv.Atoi(s)
+	fmt.Printf("%T %v\n", i, i)
 
-	fmt.Println(!true)
-	fmt.Println(!false)
+	h := "hello world"
+	fmt.Println(string(h[1]))
+
 }
