@@ -3,34 +3,36 @@ package main
 import "fmt"
 
 func main() {
-	n := []int{1, 2, 3, 4, 5, 6}
+	n := make([]int, 3, 5)
 
-	fmt.Println(n)
-	fmt.Println(n[2])
-	//2<=x<4の間の値を表示 [3,4]
-	fmt.Println(n[2:4])
-	//x<2の間の値を表示 [1,2]
-	fmt.Println(n[2:])
-	//x>=2の間の値を表示 [3,4,5,6]
-	fmt.Println(n[:2])
-	n[2] = 100
-	fmt.Println(n)
+	fmt.Printf("len=%d cap=%d value=%v\n", len(n), cap(n), n)
+	n = append(n, 0, 0)
+	fmt.Printf("len=%d cap=%d value=%v\n", len(n), cap(n), n)
+	n = append(n, 1, 2, 3, 4, 5)
+	fmt.Printf("len=%d cap=%d value=%v\n", len(n), cap(n), n)
+	n = append(n, 6)
+	fmt.Printf("len=%d cap=%d value=%v\n", len(n), cap(n), n)
 
-	//多次元配列は以下のように作成することができる。
-	var board = [][]int{
-		[]int{1, 2, 3},
-		[]int{4, 5, 6},
-		[]int{7, 8, 9},
+	a := make([]int, 3)
+	fmt.Printf("len=%d cap=%d value=%v\n", len(a), cap(a), a)
+
+	//0のスライスをメモリに確保する
+	b := make([]int, 0)
+	//nilとか無とかの意味で、メモリには確保しない
+	var c []int
+
+	//ただ出力は同じ
+	fmt.Printf("len=%d cap=%d value=%v\n", len(b), cap(b), b)
+	fmt.Printf("len=%d cap=%d value=%v\n", len(c), cap(c), c)
+
+	// 初めから0で5個確保している状態
+	//c = make([]int, 5)
+	// 5個確保しているが、値を入れていない状態
+	c = make([]int, 0, 5)
+	for i := 0; i < 5; i++ {
+		c = append(c, i)
+		fmt.Println(c)
 	}
-	fmt.Println(board)
+	fmt.Println(c)
 
-	//appendで複数の値を入れることもできる
-	n = append(n, 100, 200, 300, 400)
-	fmt.Println(n)
-
-	board[1] = append(board[1], 100, 200, 300)
-	fmt.Println(board)
-	//多次元配列の新しい配列の追加
-	board = append(board, []int{10, 11, 12})
-	fmt.Println(board)
 }
