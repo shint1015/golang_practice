@@ -1,28 +1,20 @@
 package main
 
-import (
-	"fmt"
-	"strconv"
-)
+import "fmt"
 
 func main() {
-	var x int = 1
-	xx := float64(x)
-	fmt.Printf("%T %v %f\n", xx, xx, xx)
+	var a [2]int
+	a[0] = 100
+	a[1] = 200
+	fmt.Println(a)
 
-	var y float64 = 1.2
-	yy := int(y)
-	fmt.Printf("%T %v %d\n", yy, yy, yy)
+	//最初から配列内の個数を決めている場合は、新たに配列に追加することはできない
+	//var b [2]int = [2]int{100, 200}
+	//fmt.Println(b)
+	//b = append(b, 300)
 
-	var s string = "14"
-
-	//strconvのモジュールで文字列の数字を数値の型に返還などができる。
-	//Atoiは、2つの返り値があるが, i,_ 「_」を使うことで、2つ目の返り値(今回の場合はエラー)は使わないとできる
-
-	i, _ := strconv.Atoi(s)
-	fmt.Printf("%T %v\n", i, i)
-
-	h := "hello world"
-	fmt.Println(string(h[1]))
-
+	//配列内の個数を決めてない場合は、新たに配列を追加することができる。
+	var b []int = []int{100, 200}
+	b = append(b, 300)
+	fmt.Println(b)
 }
