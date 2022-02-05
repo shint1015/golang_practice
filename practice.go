@@ -3,18 +3,34 @@ package main
 import "fmt"
 
 func main() {
-	var a [2]int
-	a[0] = 100
-	a[1] = 200
-	fmt.Println(a)
+	n := []int{1, 2, 3, 4, 5, 6}
 
-	//最初から配列内の個数を決めている場合は、新たに配列に追加することはできない
-	//var b [2]int = [2]int{100, 200}
-	//fmt.Println(b)
-	//b = append(b, 300)
+	fmt.Println(n)
+	fmt.Println(n[2])
+	//2<=x<4の間の値を表示 [3,4]
+	fmt.Println(n[2:4])
+	//x<2の間の値を表示 [1,2]
+	fmt.Println(n[2:])
+	//x>=2の間の値を表示 [3,4,5,6]
+	fmt.Println(n[:2])
+	n[2] = 100
+	fmt.Println(n)
 
-	//配列内の個数を決めてない場合は、新たに配列を追加することができる。
-	var b []int = []int{100, 200}
-	b = append(b, 300)
-	fmt.Println(b)
+	//多次元配列は以下のように作成することができる。
+	var board = [][]int{
+		[]int{1, 2, 3},
+		[]int{4, 5, 6},
+		[]int{7, 8, 9},
+	}
+	fmt.Println(board)
+
+	//appendで複数の値を入れることもできる
+	n = append(n, 100, 200, 300, 400)
+	fmt.Println(n)
+
+	board[1] = append(board[1], 100, 200, 300)
+	fmt.Println(board)
+	//多次元配列の新しい配列の追加
+	board = append(board, []int{10, 11, 12})
+	fmt.Println(board)
 }
