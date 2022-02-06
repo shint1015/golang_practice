@@ -3,35 +3,34 @@ package main
 import "fmt"
 
 func main() {
-	n := make([]int, 3, 5)
+	m := map[string]int{"apple": 100, "banana": 200}
 
-	fmt.Printf("len=%d cap=%d value=%v\n", len(n), cap(n), n)
-	n = append(n, 0, 0)
-	fmt.Printf("len=%d cap=%d value=%v\n", len(n), cap(n), n)
-	n = append(n, 1, 2, 3, 4, 5)
-	fmt.Printf("len=%d cap=%d value=%v\n", len(n), cap(n), n)
-	n = append(n, 6)
-	fmt.Printf("len=%d cap=%d value=%v\n", len(n), cap(n), n)
+	fmt.Println(m)
+	fmt.Println(m["apple"])
+	m["new"] = 500
+	fmt.Println(m)
 
-	a := make([]int, 3)
-	fmt.Printf("len=%d cap=%d value=%v\n", len(a), cap(a), a)
+	//ない場合は、0が返ってくる
+	fmt.Println(m["nothing"])
 
-	//0のスライスをメモリに確保する
-	b := make([]int, 0)
-	//nilとか無とかの意味で、メモリには確保しない
-	var c []int
+	v, ok := m["apple"]
+	fmt.Println(v, ok)
 
-	//ただ出力は同じ
-	fmt.Printf("len=%d cap=%d value=%v\n", len(b), cap(b), b)
-	fmt.Printf("len=%d cap=%d value=%v\n", len(c), cap(c), c)
+	v2, ok2 := m["nothing"]
+	fmt.Println(v2, ok2)
 
-	// 初めから0で5個確保している状態
-	//c = make([]int, 5)
-	// 5個確保しているが、値を入れていない状態
-	c = make([]int, 0, 5)
-	for i := 0; i < 5; i++ {
-		c = append(c, i)
-		fmt.Println(c)
+	m2 := make(map[string]int)
+	m2["pc"] = 5000
+	fmt.Println(m2)
+
+	//メモリ上に入れるmapがないので入れることができない
+	//var m3 map[string]int
+	//m3["pc"] = 5000
+	//fmt.Println(m3)
+
+	//varで宣言した時は、slice,map両方で「Nil」という値が入ってくる
+	var s []int
+	if s == nil {
+		fmt.Println("Nil")
 	}
-	fmt.Println(c)
 }
