@@ -3,6 +3,7 @@ package main
 import "fmt"
 
 func main() {
+	//アスキーコード
 	b := []byte{72, 73}
 	fmt.Println(b)
 	fmt.Println(string(b))
