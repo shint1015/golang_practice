@@ -2,47 +2,31 @@ package main
 
 import "fmt"
 
-func by2(num int) string {
-	if num%2 == 0 {
-		return "ok"
-	} else {
-		return "no"
-	}
-}
-
 func main() {
-	result := by2(10)
-	if result == "ok" {
-		fmt.Println("great")
-	}
-	fmt.Println(result)
-
-	//if文を短縮して書くことができる
-	//ただ、短縮したif文で定義した、変数は、if文以外で使用できない
-	if result2 := by2(10); result2 == "ok" {
-		fmt.Println(result2)
-		fmt.Println("great 2")
-	}
-	//fmt.Println(result2)
-
-	/*
-		num := 6
-		if num%2 == 0 {
-			fmt.Println("by 2")
-		} else if num%3 == 0 {
-			fmt.Println("by 3")
-		} else {
-			fmt.Println("else")
+	for i := 0; i < 10; i++ {
+		if i == 3 {
+			fmt.Println("continue")
+			continue
 		}
-	*/
-
-	x, y := 12, 13
-
-	if x == 10 && y == 10 {
-		fmt.Println("&&")
+		if i > 5 {
+			fmt.Println("break")
+			break
+		}
+		fmt.Println(i)
 	}
 
-	if x == 10 || y == 10 {
-		fmt.Println("||")
+	//第一引数？を外で定義して実行もできる
+	sum := 1
+
+	//for sum < 10(条件)
+	for sum < 10 {
+		//sum += sum
+		fmt.Println(sum)
 	}
+	fmt.Println(sum)
+
+	//無限ループに入る
+	//for {
+	//	fmt.Println("hello")
+	//}
 }
