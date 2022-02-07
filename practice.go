@@ -2,33 +2,22 @@ package main
 
 import "fmt"
 
-func incrementGenerator() func() int {
-	x := 0
-	return func() int {
-		x++
-		return x
+//可変長引数　params ...int　（変数名 ...int）
+func foo(params ...int) {
+	fmt.Println(len(params), params)
+	for _, param := range params {
+		fmt.Println(param)
 	}
-}
 
-func circleArea(pi float64) func(radius float64) float64 {
-	return func(radius float64) float64 {
-		return pi * radius * radius
-	}
 }
 
 func main() {
-	counter := incrementGenerator()
-	fmt.Println(counter())
-	fmt.Println(counter())
-	fmt.Println(counter())
-	fmt.Println(counter())
+	foo()
+	foo(1, 2)
+	foo(1, 2, 3, 4)
 
-	c1 := circleArea(3.14)
-	fmt.Println(c1(2))
-	fmt.Println(c1(3))
-
-	c2 := circleArea(3)
-	fmt.Println(c2(2))
-	fmt.Println(c2(3))
-
+	s := []int{10, 20, 30}
+	fmt.Println(s)
+	//スライスの中を渡す時 => ...
+	foo(s...)
 }
