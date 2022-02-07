@@ -1,45 +1,36 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
+
+func getOsName() string {
+	return "hogehoge"
+}
 
 func main() {
+	//os := getOsName()
+	//switch os {
 
-	//通常の配列作成
-	l := []string{"python", "go", "php"}
-
-	//普通に配列を回す時
-	for i := 0; i < len(l); i++ {
-		fmt.Println(i, l[i])
+	//短縮形で書くこともできる => 宣言した変数はswitch内でしか使えない
+	switch os := getOsName(); os {
+	case "mac":
+		fmt.Println("MAC!!")
+	case "windows":
+		fmt.Println("WINDOWS!!")
+	default:
+		fmt.Println("Default", os)
 	}
 
-	//rangeを使って配列を回す
-	//key【連番】,valueを回す時
-	for i, v := range l {
-		fmt.Println(i, v)
-	}
+	t := time.Now()
+	fmt.Println(t.Hour())
+	//switchに最初に変数を渡さずにcase内で条件を記述する時
+	switch {//変数なし
+	case t.Hour() < 12://変数を含めた条件式
+		fmt.Println("Good Morning!!")
+	case t.Hour() >= 12:
+		fmt.Println("Good Afternoon!!")
 
-	//key【連番】を回す時
-	for v := range l {
-		fmt.Println(v)
-	}
-	//valueを回す時
-	for _, v := range l {
-		fmt.Println(v)
-	}
-
-	//連想配列を作成
-	m := map[string]int{"apple": 100, "banana": 150}
-
-	//key,valueを回す時
-	for k, v := range m {
-		fmt.Println(k, v)
-	}
-	//valueだけを回す時
-	for v := range m {
-		fmt.Println(v)
-	}
-	//keyだけを回す時
-	for _, k := range m {
-		fmt.Println(k)
 	}
 }
