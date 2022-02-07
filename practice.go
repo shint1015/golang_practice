@@ -8,6 +8,9 @@ func main() {
 	fmt.Println(f)
 	//answer
 	fmt.Println(int(f))
+	//模範解答
+	i := int(f)
+	fmt.Println(i)
 
 	//Q2 ____　以下の出力結果
 	s := []int{1, 2, 5, 6, 2, 3, 1}
