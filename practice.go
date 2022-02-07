@@ -3,30 +3,43 @@ package main
 import "fmt"
 
 func main() {
-	for i := 0; i < 10; i++ {
-		if i == 3 {
-			fmt.Println("continue")
-			continue
-		}
-		if i > 5 {
-			fmt.Println("break")
-			break
-		}
-		fmt.Println(i)
+
+	//通常の配列作成
+	l := []string{"python", "go", "php"}
+
+	//普通に配列を回す時
+	for i := 0; i < len(l); i++ {
+		fmt.Println(i, l[i])
 	}
 
-	//第一引数？を外で定義して実行もできる
-	sum := 1
-
-	//for sum < 10(条件)
-	for sum < 10 {
-		//sum += sum
-		fmt.Println(sum)
+	//rangeを使って配列を回す
+	//key【連番】,valueを回す時
+	for i, v := range l {
+		fmt.Println(i, v)
 	}
-	fmt.Println(sum)
 
-	//無限ループに入る
-	//for {
-	//	fmt.Println("hello")
-	//}
+	//key【連番】を回す時
+	for v := range l {
+		fmt.Println(v)
+	}
+	//valueを回す時
+	for _, v := range l {
+		fmt.Println(v)
+	}
+
+	//連想配列を作成
+	m := map[string]int{"apple": 100, "banana": 150}
+
+	//key,valueを回す時
+	for k, v := range m {
+		fmt.Println(k, v)
+	}
+	//valueだけを回す時
+	for v := range m {
+		fmt.Println(v)
+	}
+	//keyだけを回す時
+	for _, k := range m {
+		fmt.Println(k)
+	}
 }
