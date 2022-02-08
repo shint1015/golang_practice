@@ -2,35 +2,37 @@ package main
 
 import (
 	"fmt"
-	"time"
+	"os"
 )
 
-func getOsName() string {
-	return "hogehoge"
+func foo() {
+	defer fmt.Println("world foo")
+
+	fmt.Println("hello foo")
 }
 
 func main() {
-	//os := getOsName()
-	//switch os {
+	/*
+		//deferは関数を実行した最後に実行される
+		defer fmt.Println("world")
 
-	//短縮形で書くこともできる => 宣言した変数はswitch内でしか使えない
-	switch os := getOsName(); os {
-	case "mac":
-		fmt.Println("MAC!!")
-	case "windows":
-		fmt.Println("WINDOWS!!")
-	default:
-		fmt.Println("Default", os)
-	}
+		foo()
 
-	t := time.Now()
-	fmt.Println(t.Hour())
-	//switchに最初に変数を渡さずにcase内で条件を記述する時
-	switch {//変数なし
-	case t.Hour() < 12://変数を含めた条件式
-		fmt.Println("Good Morning!!")
-	case t.Hour() >= 12:
-		fmt.Println("Good Afternoon!!")
+		fmt.Println("hello")
+	*/
 
-	}
+	fmt.Println("run")
+	//3,2,1の順で出力される => 再帰的な関数の実行みたいな？？
+	defer fmt.Println(1)
+	defer fmt.Println(2)
+	defer fmt.Println(3)
+	fmt.Println("success")
+
+	//defer:使い方の例
+	file, _ := os.Open("./practice.go")
+	defer file.Close()
+	data := make([]byte, 100)
+	file.Read(data)
+	fmt.Println(string(data))
+
 }
