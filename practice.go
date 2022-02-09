@@ -2,19 +2,36 @@ package main
 
 import "fmt"
 
-//ポインタ
-//アドレス、参照渡し
-func one(x *int) {
-	*x = 1
-}
-
 func main() {
-	var n int = 100
-	one(&n)
-	fmt.Println(n)
-	fmt.Println(*&*&n)
-	fmt.Println(&n)
-	var p *int = &n
-	fmt.Println(p)
-	fmt.Println(*p)
+	//makeとnewの違いは、ポインタを返すかどうか
+	//返す方が、new
+	s := make([]int, 0)
+	fmt.Printf("%T\n", s)
+
+	m := make(map[string]int)
+	fmt.Printf("%T\n", m)
+
+	ch := make(chan int)
+	fmt.Printf("%T\n", ch)
+
+	var p *int = new(int)
+	fmt.Printf("%T\n", p)
+
+	var st = new(struct{})
+	fmt.Printf("%T\n", st)
+
+	/*
+		//メモリに確保している
+		var p *int = new(int)
+		fmt.Println(*p)
+		*p++
+		fmt.Println(*p)
+
+		//メモリに確保していない
+		var p2 *int
+		fmt.Println(*p2)
+		//panic errorが起こる
+		*p2++
+		fmt.Println(*p2)
+	*/
 }
