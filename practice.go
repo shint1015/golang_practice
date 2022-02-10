@@ -2,30 +2,30 @@ package main
 
 import "fmt"
 
+type Vertex struct {
+	X, Y int
+}
+
+func Area(v Vertex) int {
+	return v.X * v.Y
+}
+
+// 値レシーバー
+func (v Vertex) Area() int {
+	return v.X * v.Y
+}
+
+// ポインタレシーバー
+//　参照して、structの中身に変更を加える
+func (v *Vertex) Scale(i int) {
+	v.X = v.X * i
+	v.Y = v.Y * i
+}
+
 func main() {
-	//Q1:出力結果を予測
-	/*
-		var i int = 10
-		var p *int
-		p = &i
-		var j int
-		j = *p
-		fmt.Println(j)
-	*/
-	//Q2:出力結果を予測
-	var i int = 100
-	var j int = 200
-	var p1 *int
-	var p2 *int
-	p1 = &i
-	p2 = &j
-	i = *p1 + *p2
-	//p1には、iのアドレスが入っているから
-	//この時点で*p1=300
-	//ここでp1のアドレスがp2に入る
-	p2 = p1
-	//fmt.Println(*p2)
-	//*p2=300 + i = 300 = 600
-	j = *p2 + i
-	fmt.Println(j)
+	v := Vertex{3, 4}
+	fmt.Println(Area(v))
+	v.Scale(10)
+	fmt.Println(v.Area())
+
 }
