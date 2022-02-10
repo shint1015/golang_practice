@@ -2,36 +2,59 @@ package main
 
 import "fmt"
 
+type Vertex struct {
+	//X,Y int　短縮した形でも表わせる
+	X int
+	Y int
+	S string
+}
+
+func changeVertex(v Vertex) {
+	v.X = 1000
+}
+
+func changeVertex2(v *Vertex) {
+	v.X = 1000
+	//本当は以下のように書くのが正しいが、structの場合は勝手に変換してくれる
+	//(*v).X = 1000
+}
+
 func main() {
-	//makeとnewの違いは、ポインタを返すかどうか
-	//返す方が、new
-	s := make([]int, 0)
-	fmt.Printf("%T\n", s)
+	v := Vertex{1, 2, "test"}
+	changeVertex(v)
+	fmt.Println(v)
 
-	m := make(map[string]int)
-	fmt.Printf("%T\n", m)
+	v2 := &Vertex{1, 2, "test"}
+	changeVertex2(v2)
+	fmt.Println(*v2)
+	v := Vertex{X: 1, Y: 2}
+	fmt.Println(v)
+	fmt.Println(v.X, v.Y)
+	v.X = 100
+	fmt.Println(v.X, v.Y)
 
-	ch := make(chan int)
-	fmt.Printf("%T\n", ch)
+	//yの値は指定していない場合は、0となる
+	v2 := Vertex{X: 1}
+	fmt.Println(v2)
 
-	var p *int = new(int)
-	fmt.Printf("%T\n", p)
+	//値だけの場合は、全部の値を入れないとエラーが起こる
+	v3 := Vertex{1, 2, "test"}
+	// ×　v3 := Vertex{1, 2}
+	fmt.Println(v3)
 
-	var st = new(struct{})
-	fmt.Printf("%T\n", st)
+	//v4, v5は同じ
+	v4 := Vertex{}
+	fmt.Printf("%T %v\n", v4, v4)
 
-	/*
-		//メモリに確保している
-		var p *int = new(int)
-		fmt.Println(*p)
-		*p++
-		fmt.Println(*p)
+	var v5 Vertex
+	fmt.Printf("%T %v\n", v5, v5)
 
-		//メモリに確保していない
-		var p2 *int
-		fmt.Println(*p2)
-		//panic errorが起こる
-		*p2++
-		fmt.Println(*p2)
-	*/
+	//newで宣言する時は、v7の宣言と同じ
+	v6 := new(Vertex)
+	fmt.Printf("%T %v\n", v6, v6)
+
+	//こっちの宣言の方が使われるかも
+	v7 := &Vertex{}
+	fmt.Printf("%T %v\n", v7, v7)
+
 }
