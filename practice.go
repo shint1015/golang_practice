@@ -3,6 +3,7 @@ package main
 import "fmt"
 
 func main() {
+	//Q1:出力結果を予測
 	/*
 		var i int = 10
 		var p *int
@@ -11,6 +12,7 @@ func main() {
 		j = *p
 		fmt.Println(j)
 	*/
+	//Q2:出力結果を予測
 	var i int = 100
 	var j int = 200
 	var p1 *int
