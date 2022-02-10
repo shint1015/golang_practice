@@ -20,13 +20,13 @@ func changeVertex2(v *Vertex) {
 }
 
 func main() {
-	v := Vertex{1, 2, "test"}
-	changeVertex(v)
-	fmt.Println(v)
+	vv := Vertex{1, 2, "test"}
+	changeVertex(vv)
+	fmt.Println(vv)
 
-	v2 := &Vertex{1, 2, "test"}
-	changeVertex2(v2)
-	fmt.Println(*v2)
+	vv2 := &Vertex{1, 2, "test"}
+	changeVertex2(vv2)
+	fmt.Println(*vv2)
 	v := Vertex{X: 1, Y: 2}
 	fmt.Println(v)
 	fmt.Println(v.X, v.Y)
