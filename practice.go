@@ -2,42 +2,34 @@ package main
 
 import "fmt"
 
-type Human interface {
-	Say() string
-}
+func do(i interface{}) {
+	//型がinterface型なのでintに直さないと計算ができない
+	//タイプアサーション
+	//interface型をint型に変換
+	//ii := i.(int)
+	////i = ii * 2
+	//fmt.Println(i)
+	//ii *= 2
+	//fmt.Println(ii)
+	//タイプアサーション
+	//interface型をstring型に変換
+	//ss := i.(string)
+	//fmt.Println(ss + "!")
 
-type Person struct {
-	Name string
-}
-
-type Dog struct {
-	Name string
-}
-
-func (p *Person) Say() string {
-	//中身に変更を加えたい時は、アドレスを渡す必要がある。
-	p.Name = "Mr." + p.Name
-	return p.Name
-}
-
-func DriveCar(human Human) {
-	if human.Say() == "Mr.Mike" {
-		fmt.Println("run")
-	} else {
-		fmt.Println("get out")
+	//switch type
+	switch v := i.(type) {
+	case int:
+		fmt.Println(v * 2)
+	case string:
+		fmt.Println(v + "!")
+	default:
+		fmt.Printf("I dont know %T\n", v)
 	}
+
 }
 
 func main() {
-	//Humanというinterfaceの中に、Personを入れる
-	var mike Human = &Person{"Mike"}
-	var x Human = &Person{"x"}
-	//別のストラクトだとエラーが起きる
-	var dog Dog = Dog{"Tom"}
-
-	DriveCar(mike)
-	DriveCar(x)
-	fmt.Println(dog)
-	//DriveCar(dog)
-
+	do(10)
+	do("Mike")
+	do(true)
 }
