@@ -23,6 +23,7 @@ func normal(s string) {
 }
 
 func main() {
+	//処理が終了するのを待つための処理
 	var wg sync.WaitGroup
 	wg.Add(1)
 	go goroutine("world", &wg)
