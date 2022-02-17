@@ -2,34 +2,21 @@ package main
 
 import "fmt"
 
-func do(i interface{}) {
-	//型がinterface型なのでintに直さないと計算ができない
-	//タイプアサーション
-	//interface型をint型に変換
-	//ii := i.(int)
-	////i = ii * 2
-	//fmt.Println(i)
-	//ii *= 2
-	//fmt.Println(ii)
-	//タイプアサーション
-	//interface型をstring型に変換
-	//ss := i.(string)
-	//fmt.Println(ss + "!")
+//stringer
+//出力内容を変更、制御したい時に使うことができる
 
-	//switch type
-	switch v := i.(type) {
-	case int:
-		fmt.Println(v * 2)
-	case string:
-		fmt.Println(v + "!")
-	default:
-		fmt.Printf("I dont know %T\n", v)
-	}
+type Person struct {
+	Name string
+	Age  int
+}
 
+func (p Person) String() string {
+	//return "My name is " + p.Name + "."
+	//内容的には上記と同じ
+	return fmt.Sprintf("My name is %v.", p.Name)
 }
 
 func main() {
-	do(10)
-	do("Mike")
-	do(true)
+	mike := Person{"Mike", 22}
+	fmt.Println(mike)
 }
