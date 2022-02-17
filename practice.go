@@ -2,39 +2,23 @@ package main
 
 import "fmt"
 
-type UserNotFound struct {
-	UserName string
+//Q1. 以下に、7と表示されるメソッドを作成してください。
+//Q2. X is 3! Y is 4! と表示されるStringerを作成してください。
+
+type Vertex struct {
+	X, Y int
 }
 
-//エラーをカスタマイズすることができる関数
-//ポインタじゃなくても、できるがポインタ渡しが主流
-//ポインタで渡す理由は、
-func (e *UserNotFound) Error() string {
-	return fmt.Sprintf("User not found!! %v", e.UserName)
+func (v Vertex) Plus() int {
+	return v.X + v.Y
 }
 
-func myFunc() error {
-	ok := false
-	if ok {
-		return nil
-	}
-	return &UserNotFound{UserName: "mike"}
+func (v Vertex) String() string {
+	return fmt.Sprintf("X is %v! Y is %v!", v.X, v.Y)
 }
 
 func main() {
-	//ポインタで渡す理由は、別のエラーとして扱う為？？
-	e1 := &UserNotFound{"mike"}
-	e2 := &UserNotFound{"mike"}
-	fmt.Println(e1 == e2)
-	if err := myFunc(); err != nil {
-		fmt.Println(err)
-		//errorの種類によってハンドリングを分ける
-		if err == e1 {
-
-		}
-
-		if err == e2 {
-
-		}
-	}
+	v := Vertex{3, 4}
+	fmt.Println(v.Plus())
+	fmt.Println(v)
 }
