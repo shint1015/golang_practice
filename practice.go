@@ -1,46 +1,45 @@
 package main
 
-import (
-	"fmt"
-	"sync"
-	"time"
-)
+import "fmt"
 
 //goroutine 並列処理
 
-//producer ,consumer
-//並列処理を実行して、その結果のまとまりを、consumerで処理する
+//以下みたいな感じで、処理が終わったら
+//次の処理みたいな感じで処理を実行していける
+//goroutine1 => goroutine2 => goroutine3
 
-func producer(ch chan int, i int) {
-	ch <- i * 2
+func producer(first chan int) {
+	defer close(first)
+	for i := 0; i < 10; i++ {
+		first <- i
+	}
 }
 
-func consumer(ch chan int, wg *sync.WaitGroup) {
-	for i := range ch {
-		//fmt.Println("process", i * 1000)
-		//wg.Done()
-		//処理が正常に終了してから、Doneにする時はinner funcを使う手もある
-		func() {
-			defer wg.Done()
-			fmt.Println("process", i*1000)
-		}()
+func multi2(first chan int, second chan int) {
+	defer close(second)
+	for i := range first {
+		second <- i * 2
 	}
-	fmt.Println("##########################")
+}
+
+//chanelの値渡しの関係を引数で明示することもできる
+func multi4(second <-chan int, third chan<- int) {
+	defer close(third)
+	for i := range second {
+		third <- i * 4
+	}
 }
 
 func main() {
-	var wg sync.WaitGroup
-	ch := make(chan int)
 
-	for i := 0; i < 10; i++ {
-		wg.Add(1)
-		go producer(ch, i)
+	first := make(chan int)
+	second := make(chan int)
+	third := make(chan int)
+
+	go producer(first)
+	go multi2(first, second)
+	go multi4(second, third)
+	for result := range third {
+		fmt.Println(result)
 	}
-	go consumer(ch, &wg)
-	//処理が終了するのを待つ、以前使った
-	wg.Wait()
-	//chanelはcloseしないとconsumer内で次のrangeの値を待つため、closeしてあげないといけない。
-	//close(ch)
-	time.Sleep(2 * time.Second)
-	fmt.Println("Done")
 }
