@@ -1,45 +1,45 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 //goroutine 並列処理
 
-//以下みたいな感じで、処理が終わったら
-//次の処理みたいな感じで処理を実行していける
-//goroutine1 => goroutine2 => goroutine3
-
-func producer(first chan int) {
-	defer close(first)
-	for i := 0; i < 10; i++ {
-		first <- i
+func goroutine1(ch chan string) {
+	for {
+		ch <- "package from 1"
+		time.Sleep(2 * time.Second)
 	}
 }
 
-func multi2(first chan int, second chan int) {
-	defer close(second)
-	for i := range first {
-		second <- i * 2
-	}
-}
-
-//chanelの値渡しの関係を引数で明示することもできる
-func multi4(second <-chan int, third chan<- int) {
-	defer close(third)
-	for i := range second {
-		third <- i * 4
+func goroutine2(ch chan int) {
+	for {
+		ch <- 200
+		time.Sleep(2 * time.Second)
 	}
 }
 
 func main() {
+	//channelを分けて、routineを分けることができる
+	c1 := make(chan string)
+	c2 := make(chan int)
+	go goroutine1(c1)
+	go goroutine2(c2)
 
-	first := make(chan int)
-	second := make(chan int)
-	third := make(chan int)
 
-	go producer(first)
-	go multi2(first, second)
-	go multi4(second, third)
-	for result := range third {
-		fmt.Println(result)
+	//selectを使って分ける
+	//書き方は以下のようなやり方でやる
+	for {
+		select {
+		//<-c1の値が入ってきたら
+		case msg1 := <-c1:
+			fmt.Println(msg1)
+		//<-c2の値が入ってきたら
+		case msg2 := <-c2:
+			fmt.Println(msg2)
+
+		}
 	}
 }
