@@ -1,2 +1,4 @@
 # golang_practice
-a
+
+##godoc
+godoc -http =: 6060(指定のポート番号)
