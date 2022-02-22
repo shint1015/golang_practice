@@ -2,39 +2,32 @@ package main
 
 import (
 	"fmt"
-	"regexp"
+	"sort"
 )
 
-//regexp
-//正規表現
+//sort
 
 func main() {
-	match, _ := regexp.MatchString("a([a-z0-9]+)e", "appl0e")
-	fmt.Println(match)
+	i := []int{2, 1, 5, 9, 7, 3}
+	s := []string{"A", "S", "D"}
+	p := []struct {
+		Name string
+		Age  int
+	}{
+		{"Nancy", 20},
+		{"Vera", 40},
+		{"Mike", 30},
+		{"Bob", 50},
+	}
+	fmt.Println(i, s, p)
+	//整数のソート
+	sort.Ints(i)
+	//文字列のソート
+	sort.Strings(s)
+	//struct?連想配列?の文字列ソート
+	sort.Slice(p, func(i, j int) bool { return p[i].Name < p[j].Name })
+	//struct?連想配列?の数値ソート
+	sort.Slice(p, func(i, j int) bool { return p[i].Age < p[j].Age })
 
-	//MustCompile
-	//正規表現の条件を使い回す時
-	r := regexp.MustCompile("a([a-z]+)e")
-	ms := r.MatchString("apple")
-	fmt.Println(ms)
-
-	//s := "view/test"
-	r2 := regexp.MustCompile("^/(edit|save|view)/([a-zA-Z0-9]+)$")
-
-	//FindString
-	//一致するときに、変数に値が入る
-	fs := r2.FindString("/view/testaaa")
-	fmt.Println(fs)
-	fs2 := r2.FindString("/viewwww/test")
-	fmt.Println(fs2)
-
-	//FindStringSubmatch
-	//条件と一致する時、スライスで値が帰ってくる
-	fss := r2.FindStringSubmatch("/view/test")
-	fmt.Println(fss, fss[0], fss[1], fss[2])
-	fss = r2.FindStringSubmatch("/edit/test")
-	fmt.Println(fss, fss[0], fss[1], fss[2])
-	fss = r2.FindStringSubmatch("/save/test")
-	fmt.Println(fss, fss[0], fss[1], fss[2])
-
+	fmt.Println(i, s, p)
 }
