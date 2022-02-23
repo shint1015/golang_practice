@@ -1,30 +1,51 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"io/ioutil"
-	"log"
+	"net/http"
+	"net/url"
 )
 
-//ioutil
-//ネットワーク関係で使われる
-//osパッケージと似ている
+//http
+
 func main() {
-	content, err := ioutil.ReadFile("main.go")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	//contentはbyteで返ってくる
-	fmt.Println(string(content))
+	//URLからアクセス、取得ができる
+	//resp, _ := http.Get("http://example.com")
+	//defer resp.Body.Close()
+	//body, _ := ioutil.ReadAll(resp.Body)
+	//fmt.Println(string(body))
 
-	//ファイル生成
-	//if err := ioutil.WriteFile("ioutil_temp.go", content, 0666); err != nil {
-	//	log.Fatalln(err)
-	//}
+	//urlの中が、http://example.com/avssなどが入っていたとしても
+	//http://example.comを取ってくる
+	base, _ := url.Parse("http://example.com")
+	//fmt.Println(base, err)
+	reference, _ := url.Parse("/test?a=1&b=2")
+	endpoint := base.ResolveReference(reference).String()
+	fmt.Println(endpoint)
 
-	//bufferに関しても,readAllで読み込める
-	r := bytes.NewBuffer([]byte("abc"))
-	content2, _ := ioutil.ReadAll(r)
-	fmt.Println(string(content2))
+	req, _ := http.NewRequest("GET", endpoint, nil)
+
+	//postの場合は、領域を確保してあげて、渡したい値を渡す
+	//req, _ := http.NewRequest("POST", endpoint, bytes.NewBuffer([]byte("password")))
+
+	//ヘッダーに値を追加する
+	req.Header.Add("If-None-Match", `W/"wyzzy"`)
+	//パラメータを取得できる
+	q := req.URL.Query()
+	//パラメータを追加することができる
+	q.Add("c", "3&%")
+	q.Add("d", "")
+
+	fmt.Println(q)
+	fmt.Println(req.URL.RawQuery)
+	//パラメータを変更したら、req.URL.RawQueryを更新してあげないといけない
+	req.URL.RawQuery = q.Encode()
+	fmt.Println(req.URL.RawQuery)
+
+	var client *http.Client = &http.Client{}
+	//client.Doで実際にアクセス
+	resp, _ := client.Do(req)
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println(string(body))
 }
