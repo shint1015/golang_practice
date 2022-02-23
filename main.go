@@ -1,44 +1,30 @@
 package main
 
 import (
-	"context"
+	"bytes"
 	"fmt"
-	"time"
+	"io/ioutil"
+	"log"
 )
 
-//context
-//処理に時間がかかった時に、キャンセルできる
-
-func longProcess(ctx context.Context, ch chan string) {
-	fmt.Println("run")
-	time.Sleep(2 * time.Second)
-	fmt.Println("finish")
-	ch <- "result"
-}
-
+//ioutil
+//ネットワーク関係で使われる
+//osパッケージと似ている
 func main() {
-	ch := make(chan string)
-	//contextの呼び出し
-	ctx := context.Background()
-	//context 終了条件の設定
-	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
-	defer cancel()
-	go longProcess(ctx, ch)
-
-	//goroutineの終了する
-	//cancel()
-
-CTXLOOP:
-	for {
-		select {
-		case <-ctx.Done()://ctxの終了に引っかかった時
-			fmt.Println(ctx.Err())//errorの文言を表示
-			break CTXLOOP
-		case <-ch:
-			fmt.Println("success")
-			break CTXLOOP
-		}
+	content, err := ioutil.ReadFile("main.go")
+	if err != nil {
+		log.Fatalln(err)
 	}
-	fmt.Println("##################")
+	//contentはbyteで返ってくる
+	fmt.Println(string(content))
 
+	//ファイル生成
+	//if err := ioutil.WriteFile("ioutil_temp.go", content, 0666); err != nil {
+	//	log.Fatalln(err)
+	//}
+
+	//bufferに関しても,readAllで読み込める
+	r := bytes.NewBuffer([]byte("abc"))
+	content2, _ := ioutil.ReadAll(r)
+	fmt.Println(string(content2))
 }
