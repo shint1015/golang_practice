@@ -1,51 +1,70 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"net/http"
-	"net/url"
 )
 
-//http
+type T struct{}
+
+//以下のような形で、渡すとキー名を変換できる
+//`json:"name"`
+//型を指定して渡す場合
+//`json:"name, string(型名)"`
+//jsonにする際に、非表示にする場合
+//`json:"-"`
+//空の場合、値を渡さない場合
+//`json:"name, omitempty"`
+//structにomitemptyを使う場合
+//T *T（ポインタで渡す必要がある） `json:"T,omitempty"`
+
+type Person struct {
+	Name      string   `json:"name,omitempty"`
+	Age       int      `json:"age"`
+	Nicknames []string `json:"nicknames"`
+	T         *T       `json:"T,omitempty"`
+}
+
+//UnMarshalをカスタマイズする
+//func (p *Person) UnmarshalJSON(b []byte) error {
+//	type Person2 struct {
+//		Name string
+//		Age  int
+//	}
+//	var p2 Person2
+//	err := json.Unmarshal(b, &p2)
+//	if err != nil {
+//		fmt.Println(err)
+//	}
+//	p.Name = p2.Name + "!"
+//	p.Age = p2.Age * 10
+//	return err
+//}
+
+//Marshalをカスタマイズする
+//func (p Person) MarshalJSON() ([]byte, error) {
+//	v, err := json.Marshal(&struct {
+//		Name string
+//	}{
+//		Name: "Mr." + p.Name,
+//	})
+//
+//	return v, err
+//}
 
 func main() {
-	//URLからアクセス、取得ができる
-	//resp, _ := http.Get("http://example.com")
-	//defer resp.Body.Close()
-	//body, _ := ioutil.ReadAll(resp.Body)
-	//fmt.Println(string(body))
+	b := []byte(`{"name":"Tom","age":20, "nicknames":["a","b","c"]}`)
+	var p Person
+	//Unmarshal
+	//ネットワークを入ってきたものを、そのままstructに入れてくれる
+	//小文字でも大文字でも判定して、入れてくれる
+	if err := json.Unmarshal(b, &p); err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(p.Name, p.Age, p.Nicknames)
+	//Marshal
+	//jsonに変換する関数
+	v, _ := json.Marshal(p)
+	fmt.Println(string(v))
 
-	//urlの中が、http://example.com/avssなどが入っていたとしても
-	//http://example.comを取ってくる
-	base, _ := url.Parse("http://example.com")
-	//fmt.Println(base, err)
-	reference, _ := url.Parse("/test?a=1&b=2")
-	endpoint := base.ResolveReference(reference).String()
-	fmt.Println(endpoint)
-
-	req, _ := http.NewRequest("GET", endpoint, nil)
-
-	//postの場合は、領域を確保してあげて、渡したい値を渡す
-	//req, _ := http.NewRequest("POST", endpoint, bytes.NewBuffer([]byte("password")))
-
-	//ヘッダーに値を追加する
-	req.Header.Add("If-None-Match", `W/"wyzzy"`)
-	//パラメータを取得できる
-	q := req.URL.Query()
-	//パラメータを追加することができる
-	q.Add("c", "3&%")
-	q.Add("d", "")
-
-	fmt.Println(q)
-	fmt.Println(req.URL.RawQuery)
-	//パラメータを変更したら、req.URL.RawQueryを更新してあげないといけない
-	req.URL.RawQuery = q.Encode()
-	fmt.Println(req.URL.RawQuery)
-
-	var client *http.Client = &http.Client{}
-	//client.Doで実際にアクセス
-	resp, _ := client.Do(req)
-	body, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println(string(body))
 }
