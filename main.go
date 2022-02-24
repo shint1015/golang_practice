@@ -1,43 +1,46 @@
 package main
 
 import (
-	"crypto/hmac"
-	"crypto/sha256"
-	"encoding/hex"
+	"context"
 	"fmt"
+	"time"
+
+	"golang.org/x/sync/semaphore"
 )
 
-//hmac
-//APIでサーバーへアクセスする際に
-//認証情報をヘッダーに含めることが多いのでそれで使う
+//semaphore
+//goroutineの同時実行数を制限できる
+var s *semaphore.Weighted = semaphore.NewWeighted(1)
 
-var DB = map[string]string{
-	"User1Key": "User1Secret",
-	"User2Key": "User2Secret",
-}
+func longProcess(ctx context.Context) {
 
-func Server(apiKey, sign string, data []byte) {
-	apiSecret := DB[apiKey]
-	h := hmac.New(sha256.New, []byte(apiSecret))
-	h.Write(data)
-	expectedHMAC := hex.EncodeToString(h.Sum(nil))
-	fmt.Println(sign == expectedHMAC)
+	//goroutineの制限数を超えた場合、goroutineを終了させる時
+	isAcquire := s.TryAcquire(1)
+	if !isAcquire {
+		fmt.Println("Could not get lock")
+		return
+	}
+
+	//goroutineの制限数を超えた場合、goroutineを待機させる時
+	//s.Acquire(ctx, 1)でロックする
+	//if err := s.Acquire(ctx, 1); err != nil {
+	//	fmt.Println(err)
+	//	return
+	//}
+	defer s.Release(1)
+	fmt.Println("Wait...")
+	time.Sleep(1 * time.Second)
+	fmt.Println("Done")
 }
 
 func main() {
-	const apiKey = "User1Key"
-	const apiSecret = "User1Secret"
+	ctx := context.TODO()
+	go longProcess(ctx)
+	go longProcess(ctx)
+	go longProcess(ctx)
+	time.Sleep(2 * time.Second)
+	go longProcess(ctx)
+	time.Sleep(5 * time.Second)
 
-	//■■■■■■■■■■■■■■■■■■　基本の形　■■■■■■■■■■■■■■■■■■■//
-	data := []byte("data")
-	h := hmac.New(sha256.New, []byte(apiSecret))
-	h.Write(data)
-	sign := hex.EncodeToString(h.Sum(nil))
-	//■■■■■■■■■■■■■■■■■■　基本の形　■■■■■■■■■■■■■■■■■■■//
-
-	//fmt.Println(sign)
-
-	//server側の処理
-	Server(apiKey, sign, data)
-
+	fmt.Println("Finish!!")
 }
