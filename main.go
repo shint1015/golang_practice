@@ -3,42 +3,19 @@ package main
 import (
 	"fmt"
 
-	"gopkg.in/ini.v1"
+	"github.com/markcheno/go-quote"
+	"github.com/markcheno/go-talib"
 )
 
-//ini
-//configファイルから呼び出すことができる
-//例 config.ini
-// [web]
-//	port=8080
-
-//取得方法
-//cfg, _ := ini.Load("config.ini")
-//cfg.Section("web").Key("port").MustInt()
-
-//MustString(default値)でカッコ内に値を入れることで、configファイルの値が空もしくはない場合にデフォルト値を参照する
-//pkg詳細
-//https://pkg.go.dev/gopkg.in/ini.v1
-
-type ConfigList struct {
-	Port      int
-	DbName    string
-	SQLDriver string
-}
-
-var Config ConfigList
-
-func init() {
-	cfg, _ := ini.Load("config.ini")
-	Config = ConfigList{
-		Port:      cfg.Section("web").Key("port").MustInt(),
-		DbName:    cfg.Section("db").Key("name").MustString("example.sql"),
-		SQLDriver: cfg.Section("db").Key("driver").MustString(),
-	}
-}
-
+//talib
+//株価の分析に使える
+//Rsiは株の売買の動きのグラフ
+//株価のインディケータを扱えるライブラリ
 func main() {
-	fmt.Printf("%T %v \n", Config.Port, Config.Port)
-	fmt.Printf("%T %v \n", Config.DbName, Config.DbName)
-	fmt.Printf("%T %v \n", Config.SQLDriver, Config.SQLDriver)
+	spy, _ := quote.NewQuoteFromYahoo("spy", "2016-01-01", "2016-04-01", quote.Daily, true)
+	fmt.Print(spy.CSV())
+	rsi2 := talib.Rsi(spy.Close, 2)
+	fmt.Println(rsi2)
+	mva := talib.Ema(spy.Close, 14)
+	fmt.Println(mva)
 }
