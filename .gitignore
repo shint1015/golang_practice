@@ -7,6 +7,8 @@ https://github.com/simonwhitaker/gibo
 *.dll
 *.so
 *.dylib
+# config
+*.ini
 
 # Test binary, build with `go test -c`
 *.test
