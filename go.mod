@@ -6,6 +6,7 @@ require (
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/markcheno/go-quote v0.0.0-20211116021555-bb34b59a97eb // indirect
 	github.com/markcheno/go-talib v0.0.0-20190307022042-cd53a9264d70 // indirect
+	github.com/mattn/go-sqlite3 v1.14.12 // indirect
 	github.com/yuin/goldmark v1.4.1 // indirect
 	golang.org/x/mod v0.5.1 // indirect
 	golang.org/x/net v0.0.0-20211015210444-4f30a5c0130f // indirect
