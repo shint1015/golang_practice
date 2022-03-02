@@ -1,125 +1,35 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
-	"log"
-
-	_ "github.com/mattn/go-sqlite3"
+	"io/ioutil"
 )
 
-var DbConnection *sql.DB
-
-type Person struct {
-	Name string
-	Age  int
+type Page struct {
+	Title string
+	Body  []byte
 }
 
-//Exec
-//実行だけで、結果が必要ない場合
-//Query, QueryRow
-//クエリの結果が必要な場合
+//ファイルを作成、書き込み
+func (p *Page) save() error {
+	filename := p.Title + ".txt"
+	return ioutil.WriteFile(filename, p.Body, 0600)
+}
+
+//ページの読み込み
+func loadPage(title string) (*Page, error) {
+	filename := title + ".txt"
+	body, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+	return &Page{Title: title, Body: body}, nil
+}
 
 func main() {
-	DbConnection, _ := sql.Open("sqlite3", "./example.sql")
-	defer DbConnection.Close()
-	cmd := `CREATE TABLE IF NOT EXISTS person(
-				name	STRING,
-				age		INT
-			)`
-	_, err := DbConnection.Exec(cmd)
-	if err != nil {
-		log.Fatalln(err)
-	}
+	p1 := &Page{Title: "test", Body: []byte("This is a sample Page.")}
+	p1.save()
 
-	//cmd = "INSERT INTO person (name, age) VALUES (?,?)"
-	//_, err = DbConnection.Exec(cmd, "Nancy", 20)
-	//if err != nil {
-	//	log.Fatalln(err)
-	//}
-
-	//cmd = "UPDATE person SET age = ? WHERE name = ?"
-	//_, err = DbConnection.Exec(cmd, 25, "Mike")
-	//if err != nil {
-	//	log.Fatalln(err)
-	//}
-
-	//multi select
-	//cmd = "SELECT * FROM person"
-	//rows, _ := DbConnection.Query(cmd)
-	//defer rows.Close()
-	//var pp []Person
-	//
-	//for rows.Next() {
-	//	var p Person
-	//	//ストラクトにポインタで値を渡す
-	//	//エラーハンドリングもここでしている
-	//	err := rows.Scan(&p.Name, &p.Age)
-	//	if err != nil {
-	//		log.Fatalln(err)
-	//	}
-	//	pp = append(pp, p)
-	//}
-	//
-	////まとめてエラーを取得できる
-	//err = rows.Err()
-	//if err != nil {
-	//	log.Fatalln(err)
-	//}
-	//
-	//for _, p := range pp {
-	//	fmt.Println(p.Name, p.Age)
-	//}
-
-	//single select
-	//=> QueryRow
-	//cmd = "SELECT * FROM person WHERE age = ?"
-	//row := DbConnection.QueryRow(cmd, 1000)
-	//var p Person
-	//err = row.Scan(&p.Name, &p.Age)
-	//if err != nil {
-	//	//query結果がない場合
-	//	if err == sql.ErrNoRows {
-	//		log.Println("now rows")
-	//	} else {
-	//		log.Println(err)
-	//	}
-	//}
-	//fmt.Println(p.Name, p.Age)
-
-	//cmd = "DELETE FROM person WHERE name = ?"
-	//_, err = DbConnection.Exec(cmd, "Nancy")
-	//if err != nil {
-	//	log.Fatalln(err)
-	//}
-
-	tableName := "person"
-	//テーブル名だけ「？」で変換することができないので以下のようなやり方で
-	cmd = fmt.Sprintf("SELECT * FROM %s", tableName)
-
-	rows, _ := DbConnection.Query(cmd)
-	defer rows.Close()
-	var pp []Person
-
-	for rows.Next() {
-		var p Person
-		//ストラクトにポインタで値を渡す
-		//エラーハンドリングもここでしている
-		err := rows.Scan(&p.Name, &p.Age)
-		if err != nil {
-			log.Fatalln(err)
-		}
-		pp = append(pp, p)
-	}
-
-	//まとめてエラーを取得できる
-	err = rows.Err()
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	for _, p := range pp {
-		fmt.Println(p.Name, p.Age)
-	}
-
+	p2, _ := loadPage(p1.Title)
+	fmt.Println(p2.Body)
 }
