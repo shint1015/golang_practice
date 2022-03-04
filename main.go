@@ -53,9 +53,23 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 	renderTemplate(w, "edit", p)
 }
 
-func main() {
+func saveHandler(w http.ResponseWriter, r *http.Request) {
+	title := r.URL.Path[len("/save/"):]
+	//formから値を取得
+	body := r.FormValue("body")
+	p := &Page{Title: title, Body: []byte(body)}
+	err := p.save()
+	if err != nil {
+		//errorcode
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	//リダイレクト処理
+	http.Redirect(w, r, "/view/"+title, http.StatusFound)
+}
 
+func main() {
 	http.HandleFunc("/view/", viewHandler)
 	http.HandleFunc("/edit/", editHandler)
+	http.HandleFunc("/save/", saveHandler)
 	log.Fatalln(http.ListenAndServe(":8080", nil))
 }
